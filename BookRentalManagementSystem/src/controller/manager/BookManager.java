@@ -16,7 +16,7 @@ public class BookManager {
 		return new Vector<>(books);
 	}
 	
-	public int deleteBook(String bookISBN)
+	public static int deleteBook(String bookISBN)
 	{
 		int index = -1;
 

@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+
+
 public class BorrowBookDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -35,7 +37,6 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 		pnlCenter.add(txtMatricNo);
 		pnlCenter.add(new JLabel("ISBN: ", JLabel.RIGHT));
 		pnlCenter.add(txtISBN);
-		
 		pnlSouth.add(btnSubmit);
 		pnlSouth.add(btnReset);
 		
@@ -62,7 +63,14 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 		
 		if(source==btnSubmit)
 		{
+			/*Book book = new Book();
+			Student student = new Student();
 			
+			if(BookBorrowManager.borrowBook(txtISBN.getText(),txtMatricNo.getText()))
+				JOptionPane.showMessageDialog(this, "Student with Matric No: " + student.getMatricNo() + 
+				" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			else
+				JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);*/
 		}
 		else if(source==btnReset)
 		{

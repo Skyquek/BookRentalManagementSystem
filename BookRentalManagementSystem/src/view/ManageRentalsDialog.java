@@ -1,8 +1,11 @@
 package view;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
@@ -17,10 +20,20 @@ public class ManageRentalsDialog extends JDialog implements ActionListener {
 	{
 		super(frame,"Manage Students",true);
 		
-		GridLayout layout = new GridLayout(2,1);
+		GridLayout layout = new GridLayout(1,2);
 		
 		btnBorrowBook.addActionListener(this);
 		btnReturnBook.addActionListener(this);
+		
+		btnBorrowBook.setBackground(Color.WHITE);
+		btnReturnBook.setBackground(Color.WHITE);
+		
+		btnBorrowBook.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
+		btnReturnBook.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
 		
 		this.add(btnBorrowBook);
 		this.add(btnReturnBook);
