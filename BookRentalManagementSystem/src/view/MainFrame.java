@@ -15,7 +15,6 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JButton btnManageStudents = new JButton("Manage Students");
 	private JButton btnManageRentals = new JButton("Manage Rentals");
 	
-
 	public MainFrame() 
 	{
 		

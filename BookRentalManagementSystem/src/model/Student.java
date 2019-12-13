@@ -28,4 +28,5 @@ public class Student extends Model{
 	public void setCourse(String course) {
 		this.course = course;
 	}
+
 }
