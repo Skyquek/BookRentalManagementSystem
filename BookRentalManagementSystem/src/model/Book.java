@@ -10,8 +10,8 @@ public class Book extends Model{
 		return ISBN;
 	}
 	
-	public void setISBN(String iSBN) {
-		ISBN = iSBN;
+	public void setISBN(String ISBN) {
+		this.ISBN = ISBN;
 	}
 	
 	public String getTitle() {

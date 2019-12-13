@@ -11,9 +11,9 @@ public class BookManager {
 		return books.add(book) ? 1:0;
 	}
 	
-	public void viewBook()
+	public Vector<Book> viewBook()
 	{
-		
+		return new Vector<>(books);
 	}
 	
 	public int deleteBook(String bookISBN)
