@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+
 public class MainFrame extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -30,7 +31,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.add(btnManageStudents);
 		this.add(btnManageRentals);
 		
-		this.setSize(300,200);
+		this.setSize(400,300);
 		this.setLayout(layout);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,6 +49,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		else if(source==btnManageRentals)
 			new ManageRentalsDialog(this);
 
+	}
+	
+	public static void main(String[] args) 
+	{
+		new MainFrame();
 	}
 
 }
