@@ -38,11 +38,11 @@ public class ManageRentalsDialog extends JDialog implements ActionListener {
 		Object source = event.getSource();
 		if(source==btnBorrowBook)
 		{
-			
+			new BorrowBookDialog(this);
 		}
 		else if(source==btnReturnBook)
 		{
-			
+			new ReturnBookDialog(this);
 		}
 
 	}

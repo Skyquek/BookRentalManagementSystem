@@ -3,7 +3,6 @@ package model;
 public class Book extends Model{
 	private String ISBN;
 	private String title;
-	private String bookType;
 	private String author;
 	
 	public String getISBN() {
@@ -20,14 +19,6 @@ public class Book extends Model{
 	
 	public void setTitle(String title) {
 		this.title = title;
-	}
-	
-	public String getBookType() {
-		return bookType;
-	}
-	
-	public void setBookType(String bookType) {
-		this.bookType = bookType;
 	}
 	
 	public String getAuthor() {
