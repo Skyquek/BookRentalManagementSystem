@@ -2,7 +2,6 @@ package controller.manager;
 
 import java.util.Vector;
 import model.Book;
-import model.Car;
 
 public class BookManager {
 	private static Vector<Book> books = new Vector<>();
