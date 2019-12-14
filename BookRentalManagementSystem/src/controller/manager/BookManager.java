@@ -49,58 +49,32 @@ public class BookManager {
 		return new Vector<>(books);
 	}
 	
-	public static Vector<Book> viewBook()
-	{
-		return new Vector<>(books);
-	}
 	
-	public static int deleteBook(String bookISBN)
+	public static int deleteBook(String bookISBN)throws SQLException,ClassNotFoundException
 	{
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM book WHERE ISBN =?");
 				
-		ps.setString(1,  book.getISBN());
+		ps.setString(1,  bookISBN);
+	
+		int status = ps.executeUpdate();
+		connection.close();
+		return status;
+	}
+	
+	public int updateBook(Book book) throws SQLException,ClassNotFoundException
+	{
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		PreparedStatement ps = connection.prepareStatement("UPDATE book SET(Title, Author) VALUES (?, ?) WHERE ISBN = ?");
+				
 		ps.setString(2, book.getTitle());
-		ps.setString(2, book.getAuthor());
+		ps.setString(3, book.getAuthor());
 	
 		int status = ps.executeUpdate();
 		connection.close();
 		return status;
 		
-		int index = -1;
-
-		for (int i = 0; i < books.size(); i++){
-			Book temp = books.get(i);
-
-			if(temp != null && (temp.getISBN() == bookISBN)){
-				// cars[i] = null;
-				index = i;
-
-				break;
-			}
-		}
-
-		return books.remove(index) != null ? 1 : 0;
-	}
-	
-	public int updateBook(Book book) 
-	{
-		int index = -1;
-
-		for (int i = 0; i < books.size(); i++)
-		{
-			Book temp = books.get(i);
-
-			if(temp != null && (temp.getISBN() == book.getISBN()))
-			{
-				books.set(index, book);
-				index = i;
-
-				break;
-			}
-		}
-
-		return index;
 	}
 }

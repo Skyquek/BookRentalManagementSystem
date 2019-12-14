@@ -4,8 +4,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -78,11 +80,16 @@ public class AddBookDialog extends JDialog implements ActionListener
 			book.setTitle(txtTitle.getText());
 			book.setAuthor(txtAuthor.getText());
 			
-			if(BookManager.addBook(book)!=0)
-				JOptionPane.showMessageDialog(this, "Book with ISBN: " + book.getISBN() + 
-				" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
-			else
-				JOptionPane.showMessageDialog(this, "Unable to add new book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			try {
+				if(BookManager.addBook(book)!=0)
+					JOptionPane.showMessageDialog(this, "Book with ISBN: " + book.getISBN() + 
+					" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(this, "Unable to add new book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 		else if(source==btnReset)

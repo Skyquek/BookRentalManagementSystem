@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -73,11 +74,16 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 			student.setMatricNo(txtMatricNo.getText());
 			student.setName(txtName.getText());
 			
-			if(StudentManager.addStudent(student) !=0)
-				JOptionPane.showMessageDialog(this, "Student with Matric No: " + student.getMatricNo() + 
-				" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
-			else
-				JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			try {
+				if(StudentManager.addStudent(student) !=0)
+					JOptionPane.showMessageDialog(this, "Student with Matric No: " + student.getMatricNo() + 
+					" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(source==btnReset)
 		{

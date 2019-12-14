@@ -3,8 +3,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -61,11 +63,17 @@ public class DeleteStudentDialog extends JDialog implements ActionListener
 		
 		if(source==btnSubmit)
 		{
-			if(StudentManager.deleteStudent(txtMatricNo.getText())==1)
-				JOptionPane.showMessageDialog(this, "Student with Matric No: " + txtMatricNo.getText() + 
-						" has been deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
-			else if(StudentManager.deleteStudent(txtMatricNo.getText())==0)
-				JOptionPane.showMessageDialog(this, "Unable to delete student "+ txtMatricNo.getText()+ ".","Unsuccessful",JOptionPane.WARNING_MESSAGE);	
+			try {
+				if(StudentManager.deleteStudent(txtMatricNo.getText())==1)
+					JOptionPane.showMessageDialog(this, "Student with Matric No: " + txtMatricNo.getText() + 
+							" has been deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				else if(StudentManager.deleteStudent(txtMatricNo.getText())==0)
+					JOptionPane.showMessageDialog(this, "Unable to delete student "+ txtMatricNo.getText()+ ".","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println(e);
+			}	
 		}
 		else if(source==btnReset)
 		{

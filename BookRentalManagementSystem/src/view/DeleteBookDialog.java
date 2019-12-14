@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -62,11 +63,22 @@ public class DeleteBookDialog extends JDialog implements ActionListener
 		
 		if(source==btnSubmit)
 		{
-			if(BookManager.deleteBook(txtISBN.getText())==1)
-				JOptionPane.showMessageDialog(this, "Book with ISBN: " + txtISBN.getText() + 
-						" has been deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
-			else if(BookManager.deleteBook(txtISBN.getText())==0)
-				JOptionPane.showMessageDialog(this, "Unable to delete book "+ txtISBN.getText()+ ".","Unsuccessful",JOptionPane.WARNING_MESSAGE);	
+			try {
+				if(BookManager.deleteBook(txtISBN.getText())==1)
+					JOptionPane.showMessageDialog(this, "Book with ISBN: " + txtISBN.getText() + 
+							" has been deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				else
+					try {
+						if(BookManager.deleteBook(txtISBN.getText())==0)
+							JOptionPane.showMessageDialog(this, "Unable to delete book "+ txtISBN.getText()+ ".","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+					} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 		}
 		else if(source==btnReset)
 		{
