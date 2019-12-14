@@ -14,7 +14,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import controller.manager.BookBorrowManager;
-import controller.manager.BookManager;
 
 public class ViewRentalDialog extends JDialog implements ActionListener {
 

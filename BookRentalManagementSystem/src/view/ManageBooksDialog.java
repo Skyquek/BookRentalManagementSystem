@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 public class ManageBooksDialog extends JDialog implements ActionListener 
 {
@@ -73,7 +74,17 @@ public class ManageBooksDialog extends JDialog implements ActionListener
 		}
 		else if(source==btnUpdateBook)
 		{
-			new UpdateBookDialog(this);
+			Object[] options = {"bo31710177","b031710191","b031710210"};
+			Object selectedValues = JOptionPane.showInputDialog(this, "Select book: ", "Update Books: Select book", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+			if(selectedValues=="UNINITIALIZED_VALUE" || selectedValues==null)
+			{
+				dispose();
+			}
+			else
+			{
+				new UpdateBookDialog(this,selectedValues.toString());
+			}
+			
 		}
 		else if(source==btnDeleteBook)
 		{

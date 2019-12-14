@@ -16,7 +16,7 @@ public class BookManager {
 	public static int addBook(Book book) throws SQLException, ClassNotFoundException
 	{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", " ");
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO book(ISBN, Title, Author) VALUES (?, ?, ?)");
 				
 		ps.setString(1,  book.getISBN());
@@ -32,7 +32,7 @@ public class BookManager {
 	public static Object[][] getBooks() throws SQLException, ClassNotFoundException{
 
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", " ");
 
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM book");
 		PreparedStatement ps2 = connection.prepareStatement("SELECT COUNT(*) AS rowcount FROM book");
@@ -63,7 +63,7 @@ public class BookManager {
 	public static int deleteBook(String bookISBN)throws SQLException,ClassNotFoundException
 	{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", " ");
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM book WHERE ISBN =?");
 				
 		ps.setString(1,  bookISBN);
@@ -76,7 +76,7 @@ public class BookManager {
 	public int updateBook(Book book) throws SQLException,ClassNotFoundException
 	{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", " ");
 		PreparedStatement ps = connection.prepareStatement("UPDATE book SET(Title, Author) VALUES (?, ?) WHERE ISBN = ?");
 				
 		ps.setString(2, book.getTitle());
