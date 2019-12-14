@@ -16,15 +16,20 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 	
 	public static int addBookBorrow(BookBorrow bookBorrow) throws SQLException, ClassNotFoundException
 	{
+		long millis=System.currentTimeMillis();  
+		java.sql.Date date = new java.sql.Date(millis);
+		
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
 		PreparedStatement ps = connection.prepareStatement("INSERT INTO rental(matricNo, ISBN, dateStart, rentalFees) VALUES (?, ?, ?, ?)");
 				
-		//ps.setInt(1,  bookBorrow.getRentalID());
 		ps.setString(2,  bookBorrow.getMatricNo());
 		ps.setString(3,  bookBorrow.getISBN());
-		ps.setDate(4, (Date)bookBorrow.getDateStart());
-		//ps.setDate(5, (Date)bookBorrow.getDateEnd());
+		//ps.setDate(4, (Date)bookBorrow.getDateStart());
+		
+		// Directly use sql datetime
+		ps.setDate(4, date);
+		
 		ps.setFloat(6, bookBorrow.getRentalFees());
 		
 	
@@ -61,37 +66,37 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 	}
 
 
-	public static void borrowBook(String matricNo, String isbn) throws SQLException, ClassNotFoundException
+	public static int borrowBook(String matricNo, String isbn) throws SQLException, ClassNotFoundException
 	{
 		// Date
 		long millis=System.currentTimeMillis();  
 		java.sql.Date date = new java.sql.Date(millis);  
-
+		int status = 0;
+		
+		// Database connection
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM rental WHERE ISBN=?");
-		
 		ps.setString(1, isbn);
 		
-		ResultSet rs = ps.executeQuery();
-		
-		Vector<BookBorrow> bookBorrows = new Vector<>();
-		// If book is equal to null, this mean that the book is not rent by other people
-		if(rs == null)
+		ResultSet available_book = ps.executeQuery();		
+		boolean check_book = available_book.first();
+			    
+		if(check_book == false)
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			//PreparedStatement newRental = connection.prepareStatement("INSERT INTO rental(rentalID, matricNo, ISBN, dateStart, dateEnd, rentalFees) VALUES (?, ?, ?, ?)");
 			PreparedStatement newRental = connection.prepareStatement("INSERT INTO rental(matricNo, ISBN, dateStart) VALUES (?, ?, ?)");
 			
 			//ps.setInt(1,  bookBorrow.getRentalID());
-			ps.setString(1,  matricNo);
-			ps.setString(2,  isbn);
-			ps.setDate(3, date);
+			newRental.setString(1,  matricNo);
+			newRental.setString(2,  isbn);
+			newRental.setDate(3, date);
 			
-			int status = ps.executeUpdate();
+			status = newRental.executeUpdate();
 			connection.close();
 		}
 		// Check whether the Query return another value
+		return status;
 	}
 	
 	public void returnBook(String isbn) throws SQLException, ClassNotFoundException
@@ -119,7 +124,6 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM rental WHERE ISBN = ? ");
 		
 		ps.setString(1, isbn);
-		
 		ResultSet rs = ps.executeQuery();
 		
 		connection.close();
@@ -127,8 +131,6 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		Vector<BookBorrow> bookBorrows = new Vector<>();
 		
 		// If book is equal to null, this mean that the book is not rent by other people
-		
-		
 		
 	}
 }

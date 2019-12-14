@@ -3,8 +3,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -71,11 +73,16 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 			Book book = new Book();
 			Student student = new Student();
 			
-			if(BookBorrowManager.borrowBook(txtISBN.getText(),txtMatricNo.getText())==1)
-				JOptionPane.showMessageDialog(this, "Borrow Record added for student: " + txtMatricNo.getText() + 
-				"  added.", "Success", JOptionPane.INFORMATION_MESSAGE);
-			else
-				JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			try {
+				if(BookBorrowManager.borrowBook(txtISBN.getText(), txtMatricNo.getText()) == 1)
+					JOptionPane.showMessageDialog(this, "Borrow Record added for student: " + txtMatricNo.getText() + 
+					"  added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(source==btnReset)
 		{
