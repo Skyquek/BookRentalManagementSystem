@@ -83,11 +83,19 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 				Object priceObj = v.get(1);	
 				String tempStrPrice = Long.toString((long) statusObj);
 				long price = Long.parseLong(tempStrPrice);
-							
+				
 				if(status == 1) 
-				{				
-					JOptionPane.showMessageDialog(this, "Book ISBN: " + txtISBN.getText() + 
-					" returned.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				{		
+					// Return book in time
+					if(price == 0)
+					{
+						JOptionPane.showMessageDialog(this, "Thank You for return the book in time." , "Success", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(this, "You do not return books in time, please pay RM" + price + ".", "Success", JOptionPane.INFORMATION_MESSAGE);
+					}
+					
 				}
 				else
 					JOptionPane.showMessageDialog(this, "Unable to return book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
