@@ -11,7 +11,7 @@ public class BookManager {
 		return books.add(book) ? 1:0;
 	}
 	
-	public Vector<Book> viewBook()
+	public static Vector<Book> viewBook()
 	{
 		return new Vector<>(books);
 	}
