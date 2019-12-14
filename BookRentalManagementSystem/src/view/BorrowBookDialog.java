@@ -71,7 +71,7 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 			Book book = new Book();
 			Student student = new Student();
 			
-			if(BookBorrowManager.borrowBook(txtISBN.getText(),txtMatricNo.getText())==1)
+			if(BookBorrowManager.borrowBook(txtISBN.getText(), txtMatricNo.getText()) == 1)
 				JOptionPane.showMessageDialog(this, "Borrow Record added for student: " + txtMatricNo.getText() + 
 				"  added.", "Success", JOptionPane.INFORMATION_MESSAGE);
 			else
