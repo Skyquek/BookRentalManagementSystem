@@ -105,7 +105,7 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 				
 				// price = 0: Pay right in time; price != 0: not pay right in time
 				Object priceObj = v.get(1);	
-				String tempStrPrice = Long.toString((long) priceObj);
+				String tempStrPrice = Long.toString((long) statusObj);
 				long price = Long.parseLong(tempStrPrice);
 				
 				if(status == 1) 
@@ -113,7 +113,7 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 					// Return book in time
 					if(price == 0)
 					{
-						JOptionPane.showMessageDialog(this, "Thank you for return the book in time." , "Success", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(this, "Thank You for return the book in time." , "Success", JOptionPane.INFORMATION_MESSAGE);
 					}
 					else
 						JOptionPane.showMessageDialog(this, "Unable to add new record.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
