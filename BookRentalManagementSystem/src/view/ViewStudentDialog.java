@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,6 +33,14 @@ public class ViewStudentDialog extends JDialog implements ActionListener {
 		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		String[] headerNames = {"Matric No","Name"};
+		
+		// Testing get Student Matric
+		/*try {
+			System.out.println(Arrays.toString(StudentManager.getStudentsMatric()));
+		} catch (ClassNotFoundException | SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
 		
 		JTable jtable;
 		try {

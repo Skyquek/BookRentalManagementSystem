@@ -18,9 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controller.manager.BookBorrowManager;
-import controller.validator.MaximumLengthException;
-import controller.validator.RequiredFieldException;
-import controller.validator.Validator;
 import model.Book;
 import model.Student;
 
@@ -37,13 +34,13 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 		super(dialog,"Return Book",true);
 		
 
-		JPanel pnlCenter = new JPanel(new GridLayout(1,2,10,10));
+		JPanel pnlCenter = new JPanel(new GridLayout(3,2,10,10));
 		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));
 		
-		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10,10, 10));
-		pnlSouth.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
+		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		
-		pnlCenter.add(new JLabel("ISBN: ", JLabel.LEFT));
+		pnlCenter.add(new JLabel("ISBN: ", JLabel.RIGHT));
 		pnlCenter.add(txtISBN);
 		
 		pnlSouth.add(btnSubmit);
@@ -71,30 +68,9 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 		
 		if(source==btnSubmit)
 		{
-			Vector<Exception> exceptions= new Vector<>();
-			String ISBN=null;
+			Book book = new Book();
+			Student student = new Student();
 			
-			try
-			{
-				ISBN=Validator.validate("ISBN", txtISBN.getText(), true, 15);
-			}
-			catch (RequiredFieldException | MaximumLengthException e) 
-			{
-				exceptions.add(e);
-			}
-			
-			int size=exceptions.size();
-			
-			if(size==0)
-			{
-				Book book = new Book();
-				Student student = new Student();
-				book.setISBN(ISBN);
-				
-				try {
-					if(BookBorrowManager.returnBook(txtISBN.getText(), txtMatricNo.getText()) == 1)
-						JOptionPane.showMessageDialog(this, "Borrow Record added for student: " + txtMatricNo.getText() + 
-						"  added.", "Success", JOptionPane.INFORMATION_MESSAGE);
 			try {
 				
 				// Status = 1: Fail to execute db ; Status = 0: Successful
@@ -105,7 +81,7 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 				
 				// price = 0: Pay right in time; price != 0: not pay right in time
 				Object priceObj = v.get(1);	
-				String tempStrPrice = Long.toString((long) statusObj);
+				String tempStrPrice = Long.toString((long) priceObj);
 				long price = Long.parseLong(tempStrPrice);
 				
 				if(status == 1) 
@@ -113,27 +89,19 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 					// Return book in time
 					if(price == 0)
 					{
-						JOptionPane.showMessageDialog(this, "Thank You for return the book in time." , "Success", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(this, "Thank you for return the book in time." , "Success", JOptionPane.INFORMATION_MESSAGE);
 					}
 					else
-						JOptionPane.showMessageDialog(this, "Unable to add new record.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
-				} catch (HeadlessException | ClassNotFoundException | SQLException e) {
-					e.printStackTrace();
-				}
-			}
-			else
-			{
-				String message=null;
-				if(size==1)
-					message=exceptions.firstElement().getMessage();
-				else
-				{
-					message="PLease fix the following errors: ";
+					{
+						JOptionPane.showMessageDialog(this, "You do not return books in time, please pay RM" + price + ".", "Success", JOptionPane.INFORMATION_MESSAGE);
+					}
 					
-					for(int i=0;i<size;i++)
-						message+="\n"+(i+1)+"."+exceptions.get(i).getMessage();
 				}
-				JOptionPane.showMessageDialog(this, message, "Validation Error", JOptionPane.WARNING_MESSAGE);
+				else
+					JOptionPane.showMessageDialog(this, "Unable to return book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		else if(source==btnReset)
