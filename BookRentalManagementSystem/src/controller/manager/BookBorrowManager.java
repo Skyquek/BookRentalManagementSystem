@@ -103,7 +103,7 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		return status;
 	}
 	
-	public void returnBook(String matricNo, String isbn) throws SQLException, ClassNotFoundException
+	public void returnBook(String isbn) throws SQLException, ClassNotFoundException
 	{
 		// Date
 		long millis=System.currentTimeMillis();  
@@ -125,10 +125,9 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		
 		
 		// Delete from the book
-		PreparedStatement ps = connection.prepareStatement("DELETE FROM rental WHERE ISBN = ? AND matricNo = ?");
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM rental WHERE ISBN = ? ");
 		
 		ps.setString(1, isbn);
-		ps.setString(2, matricNo);
 		
 		ResultSet rs = ps.executeQuery();
 		
