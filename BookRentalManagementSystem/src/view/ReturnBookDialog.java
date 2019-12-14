@@ -25,7 +25,6 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 	private JButton btnSubmit = new JButton ("Submit");
 	private JButton btnReset = new JButton ("Reset");
 	private JTextField txtISBN = new JTextField();
-	private JTextField txtMatricNo = new JTextField();
 
 	public ReturnBookDialog(ManageRentalsDialog dialog) 
 	{
@@ -38,8 +37,6 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		
-		pnlCenter.add(new JLabel("Matric No: ", JLabel.RIGHT));
-		pnlCenter.add(txtMatricNo);
 		pnlCenter.add(new JLabel("ISBN: ", JLabel.RIGHT));
 		pnlCenter.add(txtISBN);
 		
@@ -71,7 +68,7 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 			Book book = new Book();
 			Student student = new Student();
 			
-			if(BookBorrowManager.returnBook(txtISBN.getText(),txtMatricNo.getText())==1)
+			if(BookBorrowManager.returnBook(txtISBN.getText())==1)
 				JOptionPane.showMessageDialog(this, "Book ISBN: " + txtISBN.getText() + 
 				" returned.", "Success", JOptionPane.INFORMATION_MESSAGE);
 			else
@@ -79,7 +76,6 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 		}
 		else if(source==btnReset)
 		{
-			txtMatricNo.setText("");
 			txtISBN.setText("");
 		}
 
