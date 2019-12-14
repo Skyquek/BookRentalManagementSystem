@@ -8,6 +8,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -18,6 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controller.manager.BookManager;
+import controller.validator.MaximumLengthException;
+import controller.validator.RequiredFieldException;
+import controller.validator.Validator;
 import model.Book;
 
 public class AddBookDialog extends JDialog implements ActionListener 
@@ -74,23 +78,75 @@ public class AddBookDialog extends JDialog implements ActionListener
 		
 		if(source==btnSubmit)
 		{
-			Book book = new Book();
+			Vector<Exception> exceptions= new Vector<>();
+			String ISBN=null,Title=null,Author=null;
 			
-			book.setISBN(txtISBN.getText());
-			book.setTitle(txtTitle.getText());
-			book.setAuthor(txtAuthor.getText());
-			
-			try {
-				if(BookManager.addBook(book)!=0)
-					JOptionPane.showMessageDialog(this, "Book with ISBN: " + book.getISBN() + 
-					" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
-				else
-					JOptionPane.showMessageDialog(this, "Unable to add new book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
-			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			try
+			{
+				ISBN=Validator.validate("ISBN", txtISBN.getText(), true, 15);
+			}
+			catch (RequiredFieldException | MaximumLengthException e) 
+			{
+				exceptions.add(e);
 			}
 			
+			try
+			{
+				Title=Validator.validate("Title", txtTitle.getText(), true, 40);
+			}
+			catch (RequiredFieldException | MaximumLengthException e) 
+			{
+				exceptions.add(e);
+			}
+			
+			try
+			{
+				Author=Validator.validate("Author", txtAuthor.getText(), true, 30);
+			}
+			catch (RequiredFieldException | MaximumLengthException e) 
+			{
+				exceptions.add(e);
+			}
+			
+			int size=exceptions.size();
+			
+			if(size==0)
+			{
+				Book book = new Book();
+				book.setISBN(ISBN);
+				book.setTitle(Title);
+				book.setAuthor(Author);
+				
+				try 
+				{
+					if(BookManager.addBook(book)!=0)
+						JOptionPane.showMessageDialog(this, "Book with ISBN: " + book.getISBN() + 
+						" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+					else
+						JOptionPane.showMessageDialog(this, "Unable to add new book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+				} 
+				catch (HeadlessException | ClassNotFoundException | SQLException e) 
+				{
+					if(e.getMessage() != null) 
+					{
+						JOptionPane.showMessageDialog(this, "Duplicate entry for book with ISBN: ." + book.getISBN() + ".","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+					}			
+				}
+			}
+			else
+			{
+				String message=null;
+				if(size==1)
+					message=exceptions.firstElement().getMessage();
+				else
+				{
+					message="PLease fix the following errors: ";
+					
+					for(int i=0;i<size;i++)
+						message+="\n"+(i+1)+"."+exceptions.get(i).getMessage();
+				}
+				JOptionPane.showMessageDialog(this, message, "Validation Error", JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		else if(source==btnReset)
 		{

@@ -7,6 +7,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -17,6 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controller.manager.StudentManager;
+import controller.validator.MaximumLengthException;
+import controller.validator.RequiredFieldException;
+import controller.validator.Validator;
 import model.Student;
 
 public class AddStudentDialog extends JDialog implements ActionListener {
@@ -69,20 +73,64 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 		
 		if(source==btnSubmit)
 		{
-			Student student = new Student();
+			Vector<Exception> exceptions= new Vector<>();
+			String MatricNo=null,Name=null;
 			
-			student.setMatricNo(txtMatricNo.getText());
-			student.setName(txtName.getText());
+			try
+			{
+				MatricNo=Validator.validate("Matric No", txtMatricNo.getText(), true, 15);
+			}
+			catch (RequiredFieldException | MaximumLengthException e) 
+			{
+				exceptions.add(e);
+			}
 			
-			try {
-				if(StudentManager.addStudent(student) !=0)
-					JOptionPane.showMessageDialog(this, "Student with Matric No: " + student.getMatricNo() + 
-					" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			try
+			{
+				Name=Validator.validate("Name", txtName.getText(), true, 40);
+			}
+			catch (RequiredFieldException | MaximumLengthException e) 
+			{
+				exceptions.add(e);
+			}
+			
+			int size=exceptions.size();
+			
+			if(size==0)
+			{
+				Student student = new Student();
+				student.setMatricNo(MatricNo);
+				student.setName(Name);
+				
+				try 
+				{
+					if(StudentManager.addStudent(student)!=0)
+						JOptionPane.showMessageDialog(this, "Student with Matric No: " + student.getMatricNo() + 
+						" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+					else
+						JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+				} 
+				catch (HeadlessException | ClassNotFoundException | SQLException e) 
+				{
+					if(e.getMessage() != null) 
+					{
+						JOptionPane.showMessageDialog(this, "Duplicate entry for student with Matric No: ." + student.getMatricNo() + ".","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+					}			
+				}
+			}
+			else
+			{
+				String message=null;
+				if(size==1)
+					message=exceptions.firstElement().getMessage();
 				else
-					JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
-			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				{
+					message="PLease fix the following errors: ";
+					
+					for(int i=0;i<size;i++)
+						message+="\n"+(i+1)+"."+exceptions.get(i).getMessage();
+				}
+				JOptionPane.showMessageDialog(this, message, "Validation Error", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 		else if(source==btnReset)
