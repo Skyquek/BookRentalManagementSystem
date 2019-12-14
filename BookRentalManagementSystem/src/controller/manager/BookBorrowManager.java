@@ -28,7 +28,6 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		ps.setDate(5, (Date)bookBorrow.getDateEnd());
 		ps.setFloat(6, bookBorrow.getRentalFees());
 		
-	
 		int status = ps.executeUpdate();
 		connection.close();
 		return status;
@@ -97,8 +96,41 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		// Check whether the Query return another value
 	}
 	
-	public void returnBook()
+	public void returnBook(String matricNo, String isbn) throws SQLException, ClassNotFoundException
 	{
+		// Date
+		long millis=System.currentTimeMillis();  
+		java.sql.Date date = new java.sql.Date(millis);
+		
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+				
+		// Get Start Date
+		PreparedStatement ps_date = connection.prepareStatement("SELECT dateStart FROM rental WHERE ISBN=?");
+		
+		ps_date.setString(1,  isbn);
+		
+		ResultSet rs_date = ps_date.executeQuery();
+		connection.close();
+		
+		// Haven't implement the duration of book
+		// Date diff = date - (Date) rs_date;
+		
+		// Delete from the book
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM rental WHERE ISBN = ? AND matricNo = ?");
+		
+		ps.setString(1, isbn);
+		ps.setString(2, matricNo);
+		
+		ResultSet rs = ps.executeQuery();
+		
+		connection.close();
+		
+		Vector<BookBorrow> bookBorrows = new Vector<>();
+		
+		// If book is equal to null, this mean that the book is not rent by other people
+		
+		
 		
 	}
 }
