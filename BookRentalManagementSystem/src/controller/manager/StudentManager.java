@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
 
@@ -27,24 +28,33 @@ public class StudentManager {
 	}
 	
 	
-	public static Vector<Student> getStudents() throws SQLException, ClassNotFoundException{
+	public static Object[][] getStudents() throws SQLException, ClassNotFoundException{
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM student");
+		PreparedStatement ps2 = connection.prepareStatement("SELECT COUNT(*) AS rowcount FROM student");
+
 		ResultSet rs = ps.executeQuery();
-		Vector<Student> students = new Vector<>();
-		
-		while(rs.next()) {
-			Student student = new Student();
-			
-			student.setMatricNo(rs.getString(1));
-			student.setName(rs.getString(2));
-			
-			students.add(student);
-			connection.close();
-			return students;
-		}
-		return new Vector<>(students);
+		ResultSet rs2 = ps2.executeQuery();
+		rs2.next();
+
+		int rowsNumber=rs2.getInt("rowcount");
+		ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
+		int columnsNumber = rsmd.getColumnCount();
+
+		// Convert ResultSet to 2D Java Object
+		Object[][] resultSet = new Object[rowsNumber][columnsNumber];
+        int row = 0;
+        while (rs.next())
+        {
+            for (int i = 0; i < columnsNumber; i++) {
+                resultSet[row][i] = rs.getObject(i+1);
+            }
+            row++;
+        }
+
+		return resultSet;
 	}
 	
 	

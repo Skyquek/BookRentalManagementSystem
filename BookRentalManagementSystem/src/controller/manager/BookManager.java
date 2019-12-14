@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
+
 import model.Book;
 
 public class BookManager {
@@ -27,26 +29,34 @@ public class BookManager {
 	}
 	
 	
-	public static Vector<Book> getBooks() throws SQLException, ClassNotFoundException{
+	public static Object[][] getBooks() throws SQLException, ClassNotFoundException{
+
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM book");
+		PreparedStatement ps2 = connection.prepareStatement("SELECT COUNT(*) AS rowcount FROM book");
+
 		ResultSet rs = ps.executeQuery();
-		Vector<Book> books = new Vector<>();
-		
-		while(rs.next()) {
-			Book book = new Book();
-			
-			book.setISBN(rs.getString(1));
-			book.setTitle(rs.getString(2));
-			book.setAuthor(rs.getString(3));
-			
-			books.add(book);
-			connection.close();
-			return books;
-		}
-		//return books.add(book) ? 1:0;
-		return new Vector<>(books);
+		ResultSet rs2 = ps2.executeQuery();
+		rs2.next();
+
+		int rowsNumber=rs2.getInt("rowcount");
+		ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
+		int columnsNumber = rsmd.getColumnCount();
+
+		// Convert ResultSet to 2D Java Object
+		Object[][] resultSet = new Object[rowsNumber][columnsNumber];
+        int row = 0;
+        while (rs.next())
+        {
+            for (int i = 0; i < columnsNumber; i++) {
+                resultSet[row][i] = rs.getObject(i+1);
+            }
+            row++;
+        }
+
+		return resultSet;
 	}
 	
 	
