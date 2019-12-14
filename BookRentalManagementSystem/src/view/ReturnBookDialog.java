@@ -1,10 +1,13 @@
 package view;
-
+import java.lang.*;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -68,11 +71,30 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 			Book book = new Book();
 			Student student = new Student();
 			
-			if(BookBorrowManager.returnBook(txtISBN.getText())==1)
-				JOptionPane.showMessageDialog(this, "Book ISBN: " + txtISBN.getText() + 
-				" returned.", "Success", JOptionPane.INFORMATION_MESSAGE);
-			else
-				JOptionPane.showMessageDialog(this, "Unable to return book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			try {
+				
+				// Status = 1: Fail to execute db ; Status = 0: Successful
+				Vector v = BookBorrowManager.returnBook(txtISBN.getText());
+				Object statusObj = v.get(0);	
+				String tempStrStatus = Long.toString((long) statusObj);
+				long status = Long.parseLong(tempStrStatus);
+				
+				// price = 0: Pay right in time; price != 0: not pay right in time
+				Object priceObj = v.get(1);	
+				String tempStrPrice = Long.toString((long) statusObj);
+				long price = Long.parseLong(tempStrPrice);
+							
+				if(status == 1) 
+				{				
+					JOptionPane.showMessageDialog(this, "Book ISBN: " + txtISBN.getText() + 
+					" returned.", "Success", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else
+					JOptionPane.showMessageDialog(this, "Unable to return book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+			} catch (HeadlessException | ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(source==btnReset)
 		{

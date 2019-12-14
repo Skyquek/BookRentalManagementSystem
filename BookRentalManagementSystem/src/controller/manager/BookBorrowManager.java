@@ -1,12 +1,12 @@
 package controller.manager;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import model.BookBorrow;
 
@@ -99,38 +99,66 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		return status;
 	}
 	
-	public void returnBook(String isbn) throws SQLException, ClassNotFoundException
+	public static Vector<Long> returnBook(String isbn) throws SQLException, ClassNotFoundException
 	{
+		// First result is status, second is price
+		Vector<Long> result = new Vector<Long>();
+		result.add((long) 0);
+		result.add((long) 0);
+
 		// Date
 		long millis=System.currentTimeMillis();  
 		java.sql.Date date = new java.sql.Date(millis);
+		int status = 0;
+		long delayTime = 0; 
+		long penaltyPrice = 0;
 		
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
 				
 		// Get Start Date
-		Class.forName("com.mysql.jdbc.Driver");
 		PreparedStatement ps_date = connection.prepareStatement("SELECT dateStart FROM rental WHERE ISBN=?");
-		
 		ps_date.setString(1,  isbn);
-		
 		ResultSet rs_date = ps_date.executeQuery();
-		connection.close();
 		
-		// Haven't implement the duration of book
+		while(rs_date.next())
+		{
+			java.sql.Date old_date = rs_date.getDate("dateStart");
+			
+			//System.out.println(old_date);
+		    //java.sql.Date jsqlD = java.sql.Date.valueOf("2010-01-31");
+		    
+			long diffInMillies = Math.abs(date.getTime() - old_date.getTime());
+			long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+			    
+			// Get Date Duration
+			System.out.println(diff);
+			
+			if(diff > 7)
+			{
+				// Penalty
+				delayTime = diff - 7;
+				penaltyPrice = delayTime * 2;
+			}
+			
+			// Delete from the book
+			PreparedStatement ps = connection.prepareStatement("DELETE FROM rental WHERE ISBN = ? ");
+			
+			ps.setString(1, isbn);
+			status = ps.executeUpdate();
+			
+			
+			System.out.println("STATUS "+ status);
+			
+			//Class.forName("com.mysql.jdbc.Driver");
+			//Connection connection2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+				
+			// Prepare result to send 
+			result.set(0, (long) 1);
+			result.set(1, penaltyPrice);
+			
+		}
 		
-		
-		// Delete from the book
-		PreparedStatement ps = connection.prepareStatement("DELETE FROM rental WHERE ISBN = ? ");
-		
-		ps.setString(1, isbn);
-		ResultSet rs = ps.executeQuery();
-		
-		connection.close();
-		
-		Vector<BookBorrow> bookBorrows = new Vector<>();
-		
-		// If book is equal to null, this mean that the book is not rent by other people
-		
+		return result;
 	}
 }
