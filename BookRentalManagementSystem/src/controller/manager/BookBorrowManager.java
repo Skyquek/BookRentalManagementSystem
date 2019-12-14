@@ -77,26 +77,22 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM rental WHERE ISBN=?");
-		
 		ps.setString(1, isbn);
 		
-		//ResultSet rs = ps.executeQuery();
-		int available_book = ps.executeUpdate();
-		
-		Vector<BookBorrow> bookBorrows = new Vector<>();
-		// If book is equal to null, this mean that the book is not rent by other people
-		if(available_book == 0)
+		ResultSet available_book = ps.executeQuery();		
+		boolean check_book = available_book.first();
+			    
+		if(check_book == false)
 		{
 			Class.forName("com.mysql.jdbc.Driver");
-			//PreparedStatement newRental = connection.prepareStatement("INSERT INTO rental(rentalID, matricNo, ISBN, dateStart, dateEnd, rentalFees) VALUES (?, ?, ?, ?)");
 			PreparedStatement newRental = connection.prepareStatement("INSERT INTO rental(matricNo, ISBN, dateStart) VALUES (?, ?, ?)");
 			
 			//ps.setInt(1,  bookBorrow.getRentalID());
-			ps.setString(1,  matricNo);
-			ps.setString(2,  isbn);
-			ps.setDate(3, date);
+			newRental.setString(1,  matricNo);
+			newRental.setString(2,  isbn);
+			newRental.setDate(3, date);
 			
-			status = ps.executeUpdate();
+			status = newRental.executeUpdate();
 			connection.close();
 		}
 		// Check whether the Query return another value
@@ -128,7 +124,6 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		PreparedStatement ps = connection.prepareStatement("DELETE FROM rental WHERE ISBN = ? ");
 		
 		ps.setString(1, isbn);
-		
 		ResultSet rs = ps.executeQuery();
 		
 		connection.close();
@@ -136,8 +131,6 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		Vector<BookBorrow> bookBorrows = new Vector<>();
 		
 		// If book is equal to null, this mean that the book is not rent by other people
-		
-		
 		
 	}
 }
