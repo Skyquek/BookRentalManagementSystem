@@ -71,11 +71,11 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 			Book book = new Book();
 			Student student = new Student();
 			
-			if(BookBorrowManager.borrowBook(txtISBN.getText(),txtMatricNo.getText())==1)
-				JOptionPane.showMessageDialog(this, "Student with Matric No: " + txtMatricNo.getText() + 
-				" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			if(BookBorrowManager.returnBook(txtISBN.getText(),txtMatricNo.getText())==1)
+				JOptionPane.showMessageDialog(this, "Book ISBN: " + txtISBN.getText() + 
+				" returned.", "Success", JOptionPane.INFORMATION_MESSAGE);
 			else
-				JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this, "Unable to return book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
 		}
 		else if(source==btnReset)
 		{
