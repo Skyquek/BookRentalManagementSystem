@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -11,6 +12,9 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import controller.manager.BookManager;
+import controller.manager.StudentManager;
 
 public class ViewStudentDialog extends JDialog implements ActionListener {
 
@@ -28,17 +32,19 @@ public class ViewStudentDialog extends JDialog implements ActionListener {
 		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
 		String[] headerNames = {"Matric No","Name"};
-		Object [][] data = {{"1","2"}};
-//		for(int i =0;i<SIZE;i++) {
-//			for(int j=0;j<2;j++) {
-//				data[i][j] = value;
-//			}
-//		}
-		JTable jtable = new JTable(data,headerNames);
-		jtable.setRowHeight(25);
-		JScrollPane scrollPane = new JScrollPane(jtable);
-		jtable.setFillsViewportHeight(true);
-		pnlCenter.add(scrollPane);
+		
+		JTable jtable;
+		try {
+			jtable = new JTable(StudentManager.getStudents(),headerNames);
+			jtable.setRowHeight(25);
+			JScrollPane scrollPane = new JScrollPane(jtable);
+			jtable.setFillsViewportHeight(true);
+			pnlCenter.add(scrollPane);
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
