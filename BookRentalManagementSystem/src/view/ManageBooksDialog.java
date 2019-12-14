@@ -1,8 +1,11 @@
 package view;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
@@ -25,6 +28,24 @@ public class ManageBooksDialog extends JDialog implements ActionListener
 		btnViewBook.addActionListener(this);
 		btnUpdateBook.addActionListener(this);
 		btnDeleteBook.addActionListener(this);
+		
+		btnAddBook.setBackground(Color.WHITE);
+		btnViewBook.setBackground(Color.WHITE);
+		btnUpdateBook.setBackground(Color.WHITE);
+		btnDeleteBook.setBackground(Color.WHITE);
+		
+		btnAddBook.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
+		btnViewBook.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
+		btnUpdateBook.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
+		btnDeleteBook.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
 		
 		this.add(btnAddBook);
 		this.add(btnViewBook);

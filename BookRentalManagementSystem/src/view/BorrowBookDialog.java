@@ -10,8 +10,15 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import controller.manager.BookBorrowManager;
+import model.Book;
+import model.Student;
+
+
 
 public class BorrowBookDialog extends JDialog implements ActionListener {
 
@@ -35,7 +42,6 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 		pnlCenter.add(txtMatricNo);
 		pnlCenter.add(new JLabel("ISBN: ", JLabel.RIGHT));
 		pnlCenter.add(txtISBN);
-		
 		pnlSouth.add(btnSubmit);
 		pnlSouth.add(btnReset);
 		
@@ -62,7 +68,14 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 		
 		if(source==btnSubmit)
 		{
+			Book book = new Book();
+			Student student = new Student();
 			
+			if(BookBorrowManager.borrowBook(txtISBN.getText(),txtMatricNo.getText())==1)
+				JOptionPane.showMessageDialog(this, "Borrow Record added for student: " + txtMatricNo.getText() + 
+				"  added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			else
+				JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
 		}
 		else if(source==btnReset)
 		{

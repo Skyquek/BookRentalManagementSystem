@@ -11,8 +11,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import controller.manager.StudentManager;
+import model.Student;
 
 public class AddStudentDialog extends JDialog implements ActionListener {
 
@@ -64,7 +68,16 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 		
 		if(source==btnSubmit)
 		{
+			Student student = new Student();
 			
+			student.setMatricNo(txtMatricNo.getText());
+			student.setName(txtName.getText());
+			
+			if(StudentManager.addStudent(student) !=0)
+				JOptionPane.showMessageDialog(this, "Student with Matric No: " + student.getMatricNo() + 
+				" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			else
+				JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
 		}
 		else if(source==btnReset)
 		{
