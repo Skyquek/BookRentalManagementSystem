@@ -44,50 +44,35 @@ public class StudentManager {
 			connection.close();
 			return students;
 		}
-		//return students.add(student) ? 1:0;
 		return new Vector<>(students);
 	}
 	
 	
-	public void viewStudent()
+	public static int deleteStudent(String matricNo) throws SQLException,ClassNotFoundException
 	{
-		
-	}
-	
-	public static int deleteStudent(String matricNo)
-	{
-		int index = -1;
-
-		for (int i = 0; i < students.size(); i++){
-			Student temp = students.get(i);
-
-			if(temp != null && (temp.getMatricNo() == matricNo)){
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		PreparedStatement ps = connection.prepareStatement("DELETE FROM student WHERE matricNo=?");
 				
-				index = i;
-				break;
-			}
-		}
-
-		return students.remove(index) != null ? 1 : 0;
+		ps.setString(1,  matricNo);
+	
+		int status = ps.executeUpdate();
+		connection.close();
+		return status;
 	}
 	
-	public int updateStudent(Student student)
+	
+	public int updateStudent(Student student)throws SQLException,ClassNotFoundException
 	{
-		int index = -1;
-
-		for (int i = 0; i < students.size(); i++)
-		{
-			Student temp = students.get(i);
-
-			if(temp != null && (temp.getMatricNo() == student.getMatricNo()))
-			{
-				students.set(index, student);
-				index = i;
-
-				break;
-			}
-		}
-
-		return index;
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		PreparedStatement ps = connection.prepareStatement("UPDATE student SET(name) VALUES (?, ?) WHERE matricNo = ?");
+				
+		ps.setString(1, student.getName());
+	
+		int status = ps.executeUpdate();
+		connection.close();
+		return status;
+		
 	}
 }
