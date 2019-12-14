@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
@@ -39,30 +40,34 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 	}
 	
 	
-	public static Vector<BookBorrow> getBookBorrows() throws SQLException, ClassNotFoundException{
+	public static Object[][] getBookBorrows() throws SQLException, ClassNotFoundException{
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM rental");
+		PreparedStatement ps2 = connection.prepareStatement("SELECT COUNT(*) AS rowcount FROM rental");
+
 		ResultSet rs = ps.executeQuery();
-		Vector<BookBorrow> bookBorrows = new Vector<>();
+		ResultSet rs2 = ps2.executeQuery();
+		rs2.next();
+
+		int rowsNumber=rs2.getInt("rowcount");
+		ResultSetMetaData rsmd = (ResultSetMetaData) rs.getMetaData();
+		int columnsNumber = rsmd.getColumnCount();
+
+		// Convert ResultSet to 2D Java Object
+		Object[][] resultSet = new Object[rowsNumber][columnsNumber];
+        int row = 0;
+        while (rs.next())
+        {
+            for (int i = 0; i < columnsNumber; i++) {
+                resultSet[row][i] = rs.getObject(i+1);
+            }
+            row++;
+        }
+
+		return resultSet;
 		
-		while(rs.next()) {
-			BookBorrow bookBorrow = new BookBorrow();
-			
-			bookBorrow.setRentalID(rs.getInt(1));
-			bookBorrow.setMatricNo(rs.getString(2));
-			bookBorrow.setISBN(rs.getString(3));
-			bookBorrow.setDateStart(rs.getDate(4));
-			bookBorrow.setDateEnd(rs.getDate(5));
-			bookBorrow.setRentalFees(rs.getFloat(6));
-			
-			
-			bookBorrows.add(bookBorrow);
-			connection.close();
-			return bookBorrows;
-		}
-		//return students.add(student) ? 1:0;
-		return new Vector<>(bookBorrows);
 	}
 
 
