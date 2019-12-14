@@ -54,7 +54,7 @@ public class StudentManager {
 		
 	}
 	
-	public int deleteStudent(String matricNo)
+	public static int deleteStudent(String matricNo)
 	{
 		int index = -1;
 
@@ -62,9 +62,8 @@ public class StudentManager {
 			Student temp = students.get(i);
 
 			if(temp != null && (temp.getMatricNo() == matricNo)){
-				// cars[i] = null;
+				
 				index = i;
-
 				break;
 			}
 		}

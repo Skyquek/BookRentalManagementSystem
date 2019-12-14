@@ -1,8 +1,11 @@
 package view;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
@@ -25,6 +28,24 @@ public class ManageStudentsDialog extends JDialog implements ActionListener {
 		btnViewStudent.addActionListener(this);
 		btnUpdateStudent.addActionListener(this);
 		btnDeleteStudent.addActionListener(this);
+		
+		btnAddStudent.setBackground(Color.WHITE);
+		btnViewStudent.setBackground(Color.WHITE);
+		btnUpdateStudent.setBackground(Color.WHITE);
+		btnDeleteStudent.setBackground(Color.WHITE);
+		
+		btnAddStudent.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
+		btnViewStudent.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
+		btnUpdateStudent.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
+		btnDeleteStudent.setBorder(BorderFactory.createCompoundBorder(
+	               BorderFactory.createLineBorder(Color.GRAY, 1),
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
 		
 		this.add(btnAddStudent);
 		this.add(btnViewStudent);

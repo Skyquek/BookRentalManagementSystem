@@ -7,8 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
-
 import model.BookBorrow;
 
 public class BookBorrowManager {
@@ -36,6 +38,15 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 	
 	public static Vector<BookBorrow> getBookBorrows() throws SQLException, ClassNotFoundException{
 		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now();
+		
+		
+		LocalDate date = LocalDate.now().minusDays(300);
+		return 1; // if insert success
+		
+		//Database Part (Insert into the table)
+
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM rental");
@@ -64,6 +75,8 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 	
 	public void borrowBook(String matricNo, String isbn) throws SQLException, ClassNotFoundException
 	{
+
+		//int defaultDuration = 7;
 		// Date
 		long millis=System.currentTimeMillis();  
 		java.sql.Date date = new java.sql.Date(millis);  
@@ -129,8 +142,6 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		Vector<BookBorrow> bookBorrows = new Vector<>();
 		
 		// If book is equal to null, this mean that the book is not rent by other people
-		
-		
-		
+
 	}
 }

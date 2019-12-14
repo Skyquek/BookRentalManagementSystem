@@ -49,13 +49,12 @@ public class BookManager {
 		return new Vector<>(books);
 	}
 	
-	
-	public Vector<Book> viewBook()
+	public static Vector<Book> viewBook()
 	{
 		return new Vector<>(books);
 	}
-	/*
-	public int deleteBook(String bookISBN)
+	
+	public static int deleteBook(String bookISBN)
 	{
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
@@ -84,7 +83,7 @@ public class BookManager {
 
 		return books.remove(index) != null ? 1 : 0;
 	}
-	*/
+	
 	public int updateBook(Book book) 
 	{
 		int index = -1;

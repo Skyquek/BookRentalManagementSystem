@@ -12,26 +12,25 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class ViewBookDialog extends JDialog implements ActionListener {
+public class ViewStudentDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-
 	private JButton btnClose = new JButton("Close");
 	private JButton btnUpdate = new JButton("Update");
 
-	public ViewBookDialog(ManageBooksDialog dialog) 
+	public ViewStudentDialog(ManageStudentsDialog dialog) 
 	{
-		super(dialog,"View Book",true);
+		super(dialog,"View Students",true);
 		
 		JPanel pnlCenter = new JPanel();
 		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));
 		
 		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-		String[] headerNames = {"ISBN","Title","Author"};
-		Object [][] data = {{"1","2","3"}};
+		String[] headerNames = {"Matric No","Name"};
+		Object [][] data = {{"1","2"}};
 //		for(int i =0;i<SIZE;i++) {
-//			for(int j=0;j<3;j++) {
+//			for(int j=0;j<2;j++) {
 //				data[i][j] = value;
 //			}
 //		}
@@ -59,9 +58,7 @@ public class ViewBookDialog extends JDialog implements ActionListener {
 		this.pack();
 		this.setLocationRelativeTo(dialog);
 		this.setVisible(true);
-		
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent event) 
@@ -75,6 +72,7 @@ public class ViewBookDialog extends JDialog implements ActionListener {
 		{
 			
 		}
+
 	}
 
 }

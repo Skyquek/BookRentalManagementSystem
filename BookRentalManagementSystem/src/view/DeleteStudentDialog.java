@@ -1,6 +1,5 @@
 package view;
 
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -15,36 +14,29 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controller.manager.BookManager;
-import model.Book;
+import controller.manager.StudentManager;
 
-public class AddBookDialog extends JDialog implements ActionListener 
+public class DeleteStudentDialog extends JDialog implements ActionListener 
 {
 
 	private static final long serialVersionUID = 1L;
 	
-	private JTextField txtISBN = new JTextField();
-	private JTextField txtTitle = new JTextField();
-	private JTextField txtAuthor = new JTextField();
+	private JTextField txtMatricNo = new JTextField();
 	private JButton btnSubmit = new JButton("Submit");
 	private JButton btnReset = new JButton("Reset");
-	
 
-	public AddBookDialog(ManageBooksDialog dialog) 
+	public DeleteStudentDialog(ManageStudentsDialog dialog) 
 	{
-		super(dialog,"Add Book",true);
+		super(dialog,"Delete Student",true);
 		
-		JPanel pnlCenter = new JPanel(new GridLayout(3,2,10,10));
+		JPanel pnlCenter = new JPanel(new GridLayout(1,2,10,10));
 		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));
 		
 		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
 		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
-		pnlCenter.add(new JLabel("ISBN: ", JLabel.RIGHT));
-		pnlCenter.add(txtISBN);
-		pnlCenter.add(new JLabel("Title: ", JLabel.RIGHT));
-		pnlCenter.add(txtTitle);
-		pnlCenter.add(new JLabel("Author: ", JLabel.RIGHT));
-		pnlCenter.add(txtAuthor);
+		
+		pnlCenter.add(new JLabel("Matric No: ", JLabel.RIGHT));
+		pnlCenter.add(txtMatricNo);
 		
 		pnlSouth.add(btnSubmit);
 		pnlSouth.add(btnReset);
@@ -55,14 +47,11 @@ public class AddBookDialog extends JDialog implements ActionListener
 		btnSubmit.addActionListener(this);
 		btnReset.addActionListener(this);
 		
-		
-		
 		this.getRootPane().setDefaultButton(btnSubmit);
 		this.setResizable(false);
 		this.pack();
 		this.setLocationRelativeTo(dialog);
 		this.setVisible(true);
-		
 	}
 
 	@Override
@@ -72,25 +61,15 @@ public class AddBookDialog extends JDialog implements ActionListener
 		
 		if(source==btnSubmit)
 		{
-			Book book = new Book();
-			
-			book.setISBN(txtISBN.getText());
-			book.setTitle(txtTitle.getText());
-			book.setAuthor(txtAuthor.getText());
-			
-			if(BookManager.addBook(book)!=0)
-				JOptionPane.showMessageDialog(this, "Book with ISBN: " + book.getISBN() + 
-				" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
-			else
-				JOptionPane.showMessageDialog(this, "Unable to add new book.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
-			
+			if(StudentManager.deleteStudent(txtMatricNo.getText())==1)
+				JOptionPane.showMessageDialog(this, "Student with Matric No: " + txtMatricNo.getText() + 
+						" has been deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			else if(StudentManager.deleteStudent(txtMatricNo.getText())==0)
+				JOptionPane.showMessageDialog(this, "Unable to delete student "+ txtMatricNo.getText()+ ".","Unsuccessful",JOptionPane.WARNING_MESSAGE);	
 		}
 		else if(source==btnReset)
 		{
-			txtISBN.setText("");
-			txtTitle.setText("");
-			txtAuthor.setText("");
-		
+			txtMatricNo.setText("");
 		}
 	}
 

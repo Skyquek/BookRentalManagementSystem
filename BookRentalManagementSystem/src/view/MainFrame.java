@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,6 +26,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		btnManageStudents.addActionListener(this);
 		btnManageBooks.addActionListener(this);
 		btnManageRentals.addActionListener(this);
+		
+		
+		btnManageBooks.setBackground(Color.WHITE);
+		btnManageStudents.setBackground(Color.WHITE);
+		btnManageRentals.setBackground(Color.WHITE);
 		
 		this.add(btnManageBooks);
 		this.add(btnManageStudents);
