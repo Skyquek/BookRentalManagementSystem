@@ -100,7 +100,6 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 		{
 			txtISBN.setText("");
 		}
-
 	}
 
 }
