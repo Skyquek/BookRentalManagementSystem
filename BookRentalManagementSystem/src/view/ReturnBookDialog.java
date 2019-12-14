@@ -95,6 +95,26 @@ public class ReturnBookDialog extends JDialog implements ActionListener {
 					if(BookBorrowManager.returnBook(txtISBN.getText(), txtMatricNo.getText()) == 1)
 						JOptionPane.showMessageDialog(this, "Borrow Record added for student: " + txtMatricNo.getText() + 
 						"  added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+			try {
+				
+				// Status = 1: Fail to execute db ; Status = 0: Successful
+				Vector v = BookBorrowManager.returnBook(txtISBN.getText());
+				Object statusObj = v.get(0);	
+				String tempStrStatus = Long.toString((long) statusObj);
+				long status = Long.parseLong(tempStrStatus);
+				
+				// price = 0: Pay right in time; price != 0: not pay right in time
+				Object priceObj = v.get(1);	
+				String tempStrPrice = Long.toString((long) priceObj);
+				long price = Long.parseLong(tempStrPrice);
+				
+				if(status == 1) 
+				{		
+					// Return book in time
+					if(price == 0)
+					{
+						JOptionPane.showMessageDialog(this, "Thank you for return the book in time." , "Success", JOptionPane.INFORMATION_MESSAGE);
+					}
 					else
 						JOptionPane.showMessageDialog(this, "Unable to add new record.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
 				} catch (HeadlessException | ClassNotFoundException | SQLException e) {

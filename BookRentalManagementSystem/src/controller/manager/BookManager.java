@@ -29,7 +29,8 @@ public class BookManager {
 	}
 	
 	
-	public static Object[][] getBooks() throws SQLException, ClassNotFoundException{
+	public static Object[][] getBooks() throws SQLException, ClassNotFoundException
+	{
 
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", " ");

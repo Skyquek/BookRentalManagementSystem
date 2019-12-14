@@ -137,7 +137,7 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 			long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 			    
 			// Get Date Duration
-			System.out.println(diff);
+			//System.out.println(diff);
 			
 			if(diff > 7)
 			{
@@ -153,11 +153,14 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 			status = ps.executeUpdate();
 			
 			
-			System.out.println("STATUS "+ status);
+			//System.out.println("STATUS "+ status);
 			
 			//Class.forName("com.mysql.jdbc.Driver");
 			//Connection connection2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
 				
+			//System.out.println(status);
+			//System.out.println(penaltyPrice);
+			
 			// Prepare result to send 
 			result.set(0, (long) 1);
 			result.set(1, penaltyPrice);
