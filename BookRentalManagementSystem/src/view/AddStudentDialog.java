@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 
 import controller.manager.StudentManager;
 import controller.validator.MaximumLengthException;
+import controller.validator.PatternUnmatchedException;
 import controller.validator.RequiredFieldException;
 import controller.validator.Validator;
 import model.Student;
@@ -27,8 +28,8 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
-	private JTextField txtMatricNo = new JTextField();
-	private JTextField txtName = new JTextField();
+	private JTextField txtMatricNo = new JTextField(20);
+	private JTextField txtName = new JTextField(20);
 	private JButton btnSubmit = new JButton("Submit");
 	private JButton btnReset = new JButton("Reset");
 	
@@ -37,16 +38,17 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 	{
 		super(dialog,"Add Student",true);
 		
-		JPanel pnlCenter = new JPanel(new GridLayout(3,2,10,10));
-		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));
+		JPanel pnlCenter = new JPanel(new GridLayout(5,1,10,10));
+		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.CENTER,10,0));
 		
 		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		pnlSouth.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 		
-		pnlCenter.add(new JLabel("Matric No: ", JLabel.RIGHT));
+		pnlCenter.add(new JLabel("Matric No: *", JLabel.LEFT));
 		pnlCenter.add(txtMatricNo);
-		pnlCenter.add(new JLabel("Name: ", JLabel.RIGHT));
+		pnlCenter.add(new JLabel("Name: *", JLabel.LEFT));
 		pnlCenter.add(txtName);
+		pnlCenter.add(new JLabel("* Required"));
 		
 		pnlSouth.add(btnSubmit);
 		pnlSouth.add(btnReset);
@@ -80,7 +82,7 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 			{
 				MatricNo=Validator.validate("Matric No", txtMatricNo.getText(), true, 15);
 			}
-			catch (RequiredFieldException | MaximumLengthException e) 
+			catch (RequiredFieldException | MaximumLengthException | PatternUnmatchedException e) 
 			{
 				exceptions.add(e);
 			}
@@ -89,7 +91,7 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 			{
 				Name=Validator.validate("Name", txtName.getText(), true, 40);
 			}
-			catch (RequiredFieldException | MaximumLengthException e) 
+			catch (RequiredFieldException | MaximumLengthException | PatternUnmatchedException e) 
 			{
 				exceptions.add(e);
 			}
@@ -105,8 +107,11 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 				try 
 				{
 					if(StudentManager.addStudent(student)!=0)
+					{
 						JOptionPane.showMessageDialog(this, "Student with Matric No: " + student.getMatricNo() + 
 						" has been successfully added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+						dispose();
+					}
 					else
 						JOptionPane.showMessageDialog(this, "Unable to add new student.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
 				} 
@@ -114,7 +119,7 @@ public class AddStudentDialog extends JDialog implements ActionListener {
 				{
 					if(e.getMessage() != null) 
 					{
-						JOptionPane.showMessageDialog(this, "Duplicate entry for student with Matric No: ." + student.getMatricNo() + ".","Unsuccessful",JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(this, "Student with Matric No: ." + student.getMatricNo() + " already exists.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
 					}			
 				}
 			}

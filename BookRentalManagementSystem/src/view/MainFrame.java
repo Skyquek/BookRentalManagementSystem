@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,11 +33,15 @@ public class MainFrame extends JFrame implements ActionListener {
 		btnManageStudents.setBackground(Color.WHITE);
 		btnManageRentals.setBackground(Color.WHITE);
 		
+		btnManageBooks.setFont(new Font("Calibri", Font.BOLD, 20));
+		btnManageStudents.setFont(new Font("Calibri", Font.BOLD, 20));
+		btnManageRentals.setFont(new Font("Calibri", Font.BOLD, 20));
+		
 		this.add(btnManageBooks);
 		this.add(btnManageStudents);
 		this.add(btnManageRentals);
 		
-		this.setSize(400,300);
+		this.setSize(500,400);
 		this.setLayout(layout);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

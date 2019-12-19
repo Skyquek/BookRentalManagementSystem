@@ -4,10 +4,15 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
+import controller.manager.BookManager;
+import controller.manager.StudentManager;
 
 public class ManageRentalsDialog extends JDialog implements ActionListener {
 
@@ -33,13 +38,13 @@ public class ManageRentalsDialog extends JDialog implements ActionListener {
 		
 		btnBorrowBook.setBorder(BorderFactory.createCompoundBorder(
 	               BorderFactory.createLineBorder(Color.GRAY, 1),
-	               BorderFactory.createLineBorder(Color.WHITE, 30)));
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
 		btnReturnBook.setBorder(BorderFactory.createCompoundBorder(
 	               BorderFactory.createLineBorder(Color.GRAY, 1),
-	               BorderFactory.createLineBorder(Color.WHITE, 30)));
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
 		btnViewBorrowRecords.setBorder(BorderFactory.createCompoundBorder(
 	               BorderFactory.createLineBorder(Color.GRAY, 1),
-	               BorderFactory.createLineBorder(Color.WHITE, 30)));
+	               BorderFactory.createLineBorder(Color.WHITE, 40)));
 		
 		this.add(btnBorrowBook);
 		this.add(btnReturnBook);
@@ -58,7 +63,28 @@ public class ManageRentalsDialog extends JDialog implements ActionListener {
 		Object source = event.getSource();
 		if(source==btnBorrowBook)
 		{
-			new BorrowBookDialog(this);
+			try 
+			{
+				Object[] bookOptions = BookManager.getAvailableBooksISBN();
+				Object[] studentOptions = StudentManager.getStudentsMatric();
+				 
+				Object selectedStudent = JOptionPane.showInputDialog(this, "Select student: ", "Borrow Book", JOptionPane.QUESTION_MESSAGE, null, studentOptions, studentOptions[0]);
+				
+				if(selectedStudent!=null)
+				{
+					Object selectedBook = JOptionPane.showInputDialog(this, "Select book: ", "Borrow Book", JOptionPane.QUESTION_MESSAGE, null, bookOptions, bookOptions[0]);
+					
+					if(selectedBook!=null)
+					{
+						new BorrowBookDialog(this,selectedBook.toString(),selectedStudent.toString());
+					}
+				}
+				
+			} 
+			catch (ClassNotFoundException | SQLException e) 
+			{
+				e.printStackTrace();
+			}	
 		}
 		else if(source==btnReturnBook)
 		{

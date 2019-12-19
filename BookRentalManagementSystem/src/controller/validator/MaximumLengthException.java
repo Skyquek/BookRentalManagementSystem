@@ -6,7 +6,7 @@ public class MaximumLengthException extends Exception
 	
 	public MaximumLengthException(String field, int maximum) 
 	{
-		super(field  + " must be less than or equals to " + maximum + "characters.");
+		super(field  + " must be less than or equals to " + maximum + " characters.");
 	}
 
 }

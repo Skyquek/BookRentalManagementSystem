@@ -9,40 +9,11 @@ import java.sql.SQLException;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
-import model.BookBorrow;
-
 public class BookBorrowManager {
-	
-private static Vector<BookBorrow> bookBorrows = new Vector<>();
-	
-	public static int addBookBorrow(BookBorrow bookBorrow) throws SQLException, ClassNotFoundException
-	{
-		long millis=System.currentTimeMillis();  
-		java.sql.Date date = new java.sql.Date(millis);
-		
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root","");
-		PreparedStatement ps = connection.prepareStatement("INSERT INTO rental(matricNo, ISBN, dateStart, rentalFees) VALUES (?, ?, ?, ?)");
-				
-		ps.setString(2,  bookBorrow.getMatricNo());
-		ps.setString(3,  bookBorrow.getISBN());
-		//ps.setDate(4, (Date)bookBorrow.getDateStart());
-		
-		// Directly use sql datetime
-		ps.setDate(4, date);
-		
-		ps.setFloat(6, bookBorrow.getRentalFees());
-		
-	
-		int status = ps.executeUpdate();
-		connection.close();
-		return status;
-	}
-	
-	
+
 	public static Object[][] getBookBorrows() throws SQLException, ClassNotFoundException{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", " ");
 
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM rental");
 		PreparedStatement ps2 = connection.prepareStatement("SELECT COUNT(*) AS rowcount FROM rental");
@@ -80,7 +51,7 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		
 		// Database connection
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", " ");
 		PreparedStatement ps = connection.prepareStatement("SELECT * FROM rental WHERE ISBN=?");
 		ps.setString(1, isbn);
 		
@@ -119,7 +90,7 @@ private static Vector<BookBorrow> bookBorrows = new Vector<>();
 		long penaltyPrice = 0;
 		
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", "");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/brms", "root", " ");
 				
 		// Get Start Date
 		PreparedStatement ps_date = connection.prepareStatement("SELECT dateStart FROM rental WHERE ISBN=?");

@@ -18,8 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controller.manager.BookBorrowManager;
-import controller.manager.BookManager;
 import controller.validator.MaximumLengthException;
+import controller.validator.PatternUnmatchedException;
 import controller.validator.RequiredFieldException;
 import controller.validator.Validator;
 import model.Book;
@@ -31,23 +31,28 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JButton btnSubmit = new JButton ("Submit");
-	private JButton btnReset = new JButton ("Reset");
-	private JTextField txtISBN = new JTextField();
-	private JTextField txtMatricNo = new JTextField();
+	private JButton btnReset = new JButton ("Cancel");
+	private JTextField txtISBN = new JTextField(20);
+	private JTextField txtMatricNo = new JTextField(20);
 
-	public BorrowBookDialog(ManageRentalsDialog dialog)
+	public BorrowBookDialog(ManageRentalsDialog dialog,String isbn,String matric)
 	{
 		super(dialog,"Borrow Book",true);
 		
-		JPanel pnlCenter = new JPanel(new GridLayout(3,2,10,10));
-		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.RIGHT,10,0));
+		txtISBN.setEditable(false);
+		txtMatricNo.setEditable(false);
+		txtISBN.setText(isbn);
+		txtMatricNo.setText(matric);
+		
+		JPanel pnlCenter = new JPanel(new GridLayout(4,1,10,10));
+		JPanel pnlSouth = new JPanel(new FlowLayout(FlowLayout.CENTER,10,0));
 		
 		pnlCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 10));
-		pnlSouth.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+		pnlSouth.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 		
-		pnlCenter.add(new JLabel("Matric No: ", JLabel.RIGHT));
+		pnlCenter.add(new JLabel("Matric No: ", JLabel.LEFT));
 		pnlCenter.add(txtMatricNo);
-		pnlCenter.add(new JLabel("ISBN: ", JLabel.RIGHT));
+		pnlCenter.add(new JLabel("ISBN: ", JLabel.LEFT));
 		pnlCenter.add(txtISBN);
 		pnlSouth.add(btnSubmit);
 		pnlSouth.add(btnReset);
@@ -82,7 +87,7 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 			{
 				ISBN=Validator.validate("ISBN", txtISBN.getText(), true, 15);
 			}
-			catch (RequiredFieldException | MaximumLengthException e) 
+			catch (RequiredFieldException | MaximumLengthException | PatternUnmatchedException e) 
 			{
 				exceptions.add(e);
 			}
@@ -91,7 +96,7 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 			{
 				matricNo=Validator.validate("Matric No", txtMatricNo.getText(), true, 40);
 			}
-			catch (RequiredFieldException | MaximumLengthException e) 
+			catch (RequiredFieldException | MaximumLengthException | PatternUnmatchedException e) 
 			{
 				exceptions.add(e);
 			}
@@ -106,9 +111,12 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 				student.setMatricNo(matricNo);
 				
 				try {
-					if(BookBorrowManager.borrowBook(txtISBN.getText(), txtMatricNo.getText()) == 1)
+					if(BookBorrowManager.borrowBook(txtMatricNo.getText(),txtISBN.getText()) == 1)
+					{
 						JOptionPane.showMessageDialog(this, "Borrow Record added for student: " + txtMatricNo.getText() + 
-						"  added.", "Success", JOptionPane.INFORMATION_MESSAGE);
+						".", "Success", JOptionPane.INFORMATION_MESSAGE);
+						dispose();
+					}
 					else
 						JOptionPane.showMessageDialog(this, "Unable to add new record.","Unsuccessful",JOptionPane.WARNING_MESSAGE);
 				} catch (HeadlessException | ClassNotFoundException | SQLException e) {
@@ -132,8 +140,7 @@ public class BorrowBookDialog extends JDialog implements ActionListener {
 		}
 		else if(source==btnReset)
 		{
-			txtMatricNo.setText("");
-			txtISBN.setText("");
+			dispose();
 		}
 	}
 }
